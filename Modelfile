@@ -1,0 +1,3 @@
+From codellama:34b-instruct
+
+PARAMETER num_gpu 150
