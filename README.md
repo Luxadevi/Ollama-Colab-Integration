@@ -1,6 +1,6 @@
 # OLLAMA Google Colab Version
 
-This README provides an overview of the OLLAMA Google Colab version, its features, setup instructions, and usage guidelines.
+
 
 ## Overview
 
