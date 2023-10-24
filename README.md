@@ -76,4 +76,6 @@ To use OLLAMA in Google Colab with public access:
 - For users behind an HTTP proxy, some adjustments may be required.
 - Keep in mind that OLLAMA may close after a period of inactivity, so monitor its responsiveness.
 
-This README provides an overview of the OLLAMA Google Colab version, its features, and guidance on setup and usage. The actual commands and code can be found in the corresponding repository.
+Thanks to rofl0r for developing the nat-tunnel python app
+https://github.com/rofl0r/nat-tunnel
+This README provides an overview of the OLLAMA Google Colab version, its features, and guidance on setup and usage. The actual commands and code can be found in the .inypb file.
