@@ -69,6 +69,10 @@ To use OLLAMA in Google Colab with public access:
 3. **Check OLLAMA Status:**
 
     To check the status of your OLLAMA instance, use the provided command.
+### TODO 
+
+Develop a way to run Ollama as a service and restart itself when exited.
+
 
 ## Note
 
