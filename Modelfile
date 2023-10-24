@@ -1,3 +1,2 @@
 From codellama:13b-instruct
 
-PARAMETER num_gpu 150
