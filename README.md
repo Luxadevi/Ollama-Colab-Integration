@@ -17,6 +17,8 @@ This is a work in progres subject to change.
 - Setup of a tunnel to access the OLLAMA API.
 - Simulated port utilization for the tunnel.
 - Download of a model file for testing.
+- Modelfile under /content/ with modelcodellama:13b-instruct
+
 
 ## Setup
 
