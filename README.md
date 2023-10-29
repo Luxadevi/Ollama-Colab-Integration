@@ -3,83 +3,54 @@
 
 
 ## Overview
-
-OLLAMA is a tool designed for running OLLAMA models in a Google Colab environment with minimal resource costs. This version utilizes NAT tunneling to make your OLLAMA instance publicly accessible, allowing users to interact with it from external locations.
-### Disclaimer 
-
-This is a work in progres subject to change.
+This repository offers an all-encompassing solution to run large language models in the cloud via Ollama. Designed for secure and scalable access to cloud-hosted language models, this setup is especially beneficial for leveraging advanced AI capabilities from remote locations. It's ideal for researchers, developers, and businesses seeking to manage intensive computational tasks in the cloud.
 
 ### Features
+- **NAT Tunneling**: Secure access to large language models in the cloud.
+- **Background Processing**: Run Ollama and the NAT tunnel as background services for uninterrupted operations.
+- **Monitoring**: Constant monitoring of Ollama and the NAT tunnel for dependable service.
+- **Logging**: Comprehensive logging of Ollama and NAT tunnel activities for analysis and troubleshooting.
+- **Interactive Modelfile Creator**: Customize responses from Ollama with an easy-to-use Modelfile creator.
 
-- Simplified installation of the latest CUDA drivers.
-- GPU information retrieval through `pciutils`.
-- Installation of OLLAMA for language model operations.
-- Setup of a tunnel to access the OLLAMA API.
-- Simulated port utilization for the tunnel.
-- Download of a model file for testing.
-- Modelfile under /content/ with modelcodellama:13b-instruct
+## Installation
+### 1. Dependencies
+Follow our detailed installation guide to set up essential dependencies like CUDA, Ollama, and NAT tunneling configurations.
 
-
-## Setup
-
-To use OLLAMA in Google Colab, follow these setup steps:
-
-1. **CUDA Drivers and Toolkit Installation:**
-
-    Download and install the latest CUDA drivers and toolkit for GPU support.
-
-2. **OLLAMA Installation:**
-
-    Install OLLAMA for running language models.
-
-3. **Model File Download:**
-
-    Download a model file for testing purposes. The file should be saved in the `/content/` directory.
-
-4. **NAT Tunneling Setup:**
-
-    To make your OLLAMA instance publicly accessible, set up NAT tunneling:
-
-    - Download the NAT tunneling tool (details provided in the repository).
-    - Ensure at least one port is exposed to receive connections.
-    - On the server side, run `natsrv.py` with the appropriate configuration.
-
-5. **Tunneling:**
-
-    Start the tunnel application to establish the connection. A Python script simulates a port being in use.
+### 2. Setup Ollama and NAT Tunnel
+Configure and launch the Ollama service and NAT tunnel using the provided scripts, ensuring secure operations with your secret password and endpoint IP address.
 
 ## Usage
+### Running the Services
+Initiate the Ollama and NAT tunnel services with the provided Python script. This script guarantees that both services will continuously operate in the background and will automatically restart if any issues occur.
 
-To use OLLAMA in Google Colab with public access:
+### Self-Checks and Dynamic Monitoring
+The setup includes self-check mechanisms and dynamic monitoring for the `natsrv.py` application, ensuring high availability and performance. Regular health checks and automated restarts help in maintaining continuous, trouble-free operation.
 
-1. **Start Tunneling:**
+### Interactive Modelfile Creator
+The Jupyter notebook interface allows for easy creation and deployment of custom Modelfiles. You can select desired models, adjust parameters, and define custom template variables for specific AI behaviors.
 
-    - Run the command to initiate NAT tunneling and connect to the server.
-    - Input your IP address and a secret when prompted.
+## Logs
+Logs are auto-generated for Ollama and the NAT tunnel, offering insights into their operational status and assisting in troubleshooting. They are stored in:
+- **Ollama Logs**: `ollama.log` and `ollama_error.log`
+- **NAT Tunnel Logs**: `natsrv.log` and `natsrv_error.log`
+- **General Status and Error Logs**: `status.log` and `error.log`
 
-2. **Running OLLAMA:**
+## Troubleshooting
+- **Memory Issues**: Address crashes due to VRAM limitations by using smaller models or restarting the services.
+- **Connectivity Issues**: Check your NAT tunnel configuration and ensure that necessary ports are forwarded properly.
 
-    Choose one of the following options to run OLLAMA:
+## Contributing
+Contributions are welcome! Fork the repository, make your changes, and submit a pull request.
 
-    - Run OLLAMA in the terminal output for debugging and initial setup.
-    - Run OLLAMA in the background for production use.
+## TODO
+- Introduce dynamic log viewing features.
+- Add more functions for improved interactions with the Ollama API.
+- Develop a more intuitive setup and monitoring interface.
 
-    Detailed commands are available in the repository.
+### Acknowledgements
+Special thanks to [rofl0r](https://github.com/rofl0r) for developing the "nat-tunnel," which plays a crucial role in this setup.
 
-3. **Check OLLAMA Status:**
+## License
+This project is licensed under the [MIT License](LICENSE.md).
 
-    To check the status of your OLLAMA instance, use the provided command.
-### TODO 
-
-Develop a way to run Ollama as a service and restart itself when exited.
-
-
-## Note
-
-- Ensure that you have the latest drivers and CUDA toolkit installed for GPU support.
-- For users behind an HTTP proxy, some adjustments may be required.
-- Keep in mind that OLLAMA may close after a period of inactivity, so monitor its responsiveness.
-
-Thanks to rofl0r for developing the nat-tunnel python app
-https://github.com/rofl0r/nat-tunnel
-This README provides an overview of the OLLAMA Google Colab version, its features, and guidance on setup and usage. The actual commands and code can be found in the .inypb file.
+---
