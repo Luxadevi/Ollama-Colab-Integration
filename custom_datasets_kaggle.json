@@ -1270,10 +1270,10 @@
     "deepseek-coder": [
         "1.3b-base.Q5_K_M.gguf",
         "1.3b-instruct.Q5_K_M.gguf",
-        "33b-base.Q5_K_M.gguf",
-        "33b-instruct.Q5_K_M.gguf",
         "5.7bmqa-base.Q5_K_M.gguf",
         "6.7b-base.Q5_K_M.gguf",
-        "6.7b-instruct.Q5_K_M.gguf"
+        "6.7b-instruct.Q5_K_M.gguf",
+        "33b-base.Q5_K_M.gguf",
+        "33b-instruct.Q5_K_M.gguf"
     ]
 }
