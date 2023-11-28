@@ -1,0 +1,6 @@
+model_list:
+- model_name: ollama/dummyentry
+  litellm_params:
+    model: ollama/dummyentry
+    api_base: http://127.0.0.1:11434
+    json: True
