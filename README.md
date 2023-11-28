@@ -1,56 +1,33 @@
-# OLLAMA Google Colab Version
 
-
+# OLLAMA Colab Integration V3 with Ollama Companion
 
 ## Overview
-This repository offers an all-encompassing solution to run large language models in the cloud via Ollama. Designed for secure and scalable access to cloud-hosted language models, this setup is especially beneficial for leveraging advanced AI capabilities from remote locations. It's ideal for researchers, developers, and businesses seeking to manage intensive computational tasks in the cloud.
+Looking to run large language models but facing VRAM or computational limitations? Ollama Colab Integration V3 introduces the Ollama Companion, a Gradio WebUI, making model interaction seamless and efficient. This update focuses on integrating the Ollama Companion within the notebook and employing Cloudflared for secure, independent tunneling.
 
 ### Features
-- **NAT Tunneling**: Secure access to large language models in the cloud.
-- **Background Processing**: Run Ollama and the NAT tunnel as background services for uninterrupted operations.
-- **Monitoring**: Constant monitoring of Ollama and the NAT tunnel for dependable service.
-- **Logging**: Comprehensive logging of Ollama and NAT tunnel activities for analysis and troubleshooting.
-- **Interactive Modelfile Creator**: Customize responses from Ollama with an easy-to-use Modelfile creator.
+- **Ollama Companion Integration**: A Gradio WebUI integrated directly within the notebook for intuitive model interaction.
+- **Cloudflared Tunneling**: Secure and reliable endpoint creation independent of third-party software.
+- **Up-to-Date Model Access**: Access a constantly updated list of models through a user-friendly dropdown menu.
+- **ModelFile Templater**: Easy customization of model parameters like mirostat settings and temperature.
+- **Detailed Model Insights**: In-depth information about each model, including licensing and parameters.
+- **Public Endpoint Management**: Easy management of public endpoints for original and OpenAI models.
+- **LiteLLM Proxy Integration**: Direct control and automated polling for LiteLLM proxy.
+- **Additional Utilities**: Tools for CURL command creation and manual model setup.
 
-## Installation
-### 1. Dependencies
-Follow our detailed installation guide to set up essential dependencies like CUDA, Ollama, and NAT tunneling configurations.
-
-### 2. Setup Ollama and NAT Tunnel
-Configure and launch the Ollama service and NAT tunnel using the provided scripts, ensuring secure operations with your secret password and endpoint IP address.
-
-## Usage
-### Running the Services
-Initiate the Ollama and NAT tunnel services with the provided Python script. This script guarantees that both services will continuously operate in the background and will automatically restart if any issues occur.
-
-### Self-Checks and Dynamic Monitoring
-The setup includes self-check mechanisms and dynamic monitoring for the `natsrv.py` application, ensuring high availability and performance. Regular health checks and automated restarts help in maintaining continuous, trouble-free operation.
-
-### Interactive Modelfile Creator
-The Jupyter notebook interface allows for easy creation and deployment of custom Modelfiles. You can select desired models, adjust parameters, and define custom template variables for specific AI behaviors.
-
-## Logs
-Logs are auto-generated for Ollama and the NAT tunnel, offering insights into their operational status and assisting in troubleshooting. They are stored in:
-- **Ollama Logs**: `ollama.log` and `ollama_error.log`
-- **NAT Tunnel Logs**: `natsrv.log` and `natsrv_error.log`
-- **General Status and Error Logs**: `status.log` and `error.log`
-
-## Troubleshooting
-- **Memory Issues**: Address crashes due to VRAM limitations by using smaller models or restarting the services.
-- **Connectivity Issues**: Check your NAT tunnel configuration and ensure that necessary ports are forwarded properly.
+## Troubleshooting Experience and Behavior
+1. **Model Loading Issues**: If loading large models onto the GPU causes crashes, try first with a small, dummy model.
+2. **CPU Fallback**: Post-crash, models may run on CPU. Load the small model and then retry the larger one.
+3. **VRAM Limitation**: Avoid exceeding 13GB of VRAM to prevent overheating and crashes.
+4. **RAM and Storage Capacity**: Insufficient RAM or storage can lead to preloading issues.
+5. **Using Kaggle for Enhanced Performance**: Kaggle offers up to 24GB VRAM and extra RAM, providing better performance at no extra cost. For different setups, refer to the Kaggle version on my GitHub.
 
 ## Contributing
-Contributions are welcome! Fork the repository, make your changes, and submit a pull request.
+We welcome contributions to enhance Ollama Colab Integration V3. Feel free to suggest improvements, open feature requests, or report issues.
 
-## TODO
-- Introduce dynamic log viewing features.
-- Add more functions for improved interactions with the Ollama API.
-- Develop a more intuitive setup and monitoring interface.
+## Future Enhancements
+- Expansion of Ollama Companion features.
+- Introduction of user-friendly customization options.
 
-### Acknowledgements
-Special thanks to [rofl0r](https://github.com/rofl0r) for developing the "nat-tunnel," which plays a crucial role in this setup.
 
 ## License
 This project is licensed under the [MIT License](LICENSE.md).
-
----
