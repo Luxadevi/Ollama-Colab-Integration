@@ -2,34 +2,20 @@ import gradio as gr
 import json
 import subprocess
 import requests
-import re
-import os
-import threading
-import yaml
-import subprocess
-import threading
-import logging.handlers
-import httpx
-import sys
-import os
-import time
+import re  # Import the re module
 from flask import Flask, request, Response
-import requests
 from flask_cloudflared import run_with_cloudflared
-import gradio as gr
 from threading import Thread
-import sys
-import logging.handlers
+import time
+import yaml
+import os
+import yaml
 
-
-script_dir = os.path.dirname(os.path.abspath(__file__))  # Get the directory of the current script
-config_path = os.path.join(script_dir, './config.yaml')
 litellm_proxycmd = "PYTHONUNBUFFERED=1 litellm --config ./config.yaml >> litellmlog 2>&1 &"
 
-
 polling_active = False
-endpointcmd = "PYTHONUNBUFFERED=1 python3 ./endpoint.py >> endpoint.log 2>&1 &"
-kill_endpointcmd = "pkill -f './endpoint.py'"
+endpointcmd = "PYTHONUNBUFFERED=1 python3 /content/endpoint.py >> endpoint.log 2>&1 &"
+kill_endpointcmd = "pkill -f '/content/endpoint.py'"
 
 
 # Global variables for dropdown options
@@ -63,15 +49,38 @@ parameters = {
     'top_k': [0, (0, 100)],
     'top_p': [1.0, (0.1, 1.0)]
 }
+
 def initialize_log_files():
     log_files = ["litellmlog", "endpoint.log", "endpoint_openai.log"]
+    content_dir = '/content/'  # Directory path to /content/
+
     for log_file in log_files:
-        log_file_path = os.path.join(script_dir, log_file)
+        log_file_path = os.path.join(content_dir, log_file)
+
         if not os.path.exists(log_file_path):
             open(log_file_path, 'w').close()
-            print(f"Created log file: {log_file}")
+            print(f"Created log file: {log_file_path}")
         else:
-            print(f"Log file already exists: {log_file}")
+            print(f"Log file already exists: {log_file_path}")
+
+def is_litellm_running():
+    """Check if LiteLLM is currently running."""
+    try:
+        result = subprocess.run(["pgrep", "-f", "litellm --config"], capture_output=True, text=True)
+        return result.stdout != ""
+    except Exception as e:
+        print(f"Error checking if LiteLLM is running: {e}")
+        return False
+
+def restart_litellm():
+    """Restart the LiteLLM process."""
+    try:
+        kill_litellm_proxy()
+        time.sleep(5)
+        start_litellm_proxy_and_read_log()
+        print("LiteLLM proxy restarted successfully.")
+    except Exception as e:
+        print(f"Error restarting LiteLLM: {e}")
 
 def kill_litellm_proxy():
     try:
@@ -87,15 +96,13 @@ def kill_litellm_proxy():
 def start_litellm_proxy_and_read_log():
     try:
         # Start the LiteLLM proxy using subprocess
-        subprocess.Popen([litellm_proxycmd], shell=True)
-
-
+        subprocess.Popen(litellm_proxycmd, shell=True)
 
         # Wait for some time for the proxy to start and log
         time.sleep(15)
 
         # Read the log file and search for specific lines
-        log_file_path = "./litellmlog"
+        log_file_path = "/content/litellmlog"
         with open(log_file_path, "r") as log_file:
             lines = log_file.readlines()
 
@@ -130,32 +137,8 @@ def stop_polling():
     global polling_active
     polling_active = False
     return "Polling stopped"
-def is_litellm_running():
-    """Check if LiteLLM is currently running."""
-    try:
-        # Using subprocess to check if litellm process is running
-        result = subprocess.run(["pgrep", "-f", "litellm --config"], capture_output=True, text=True)
-        return result.stdout != ""
-    except Exception as e:
-        print(f"Error checking if LiteLLM is running: {e}")
-        return False
-
-def restart_litellm():
-    """Restart the LiteLLM process."""
-    try:
-        # Kill the current LiteLLM process
-        kill_litellm_proxy()
-        # Wait for a moment to ensure the process has been killed
-        time.sleep(5)
-        # Start the LiteLLM process again
-        start_litellm_proxy_and_read_log()
-        print("LiteLLM proxy restarted successfully.")
-    except Exception as e:
-        print(f"Error restarting LiteLLM: {e}")
-
 def update_config_file(model_names):
-    global current_model_list
-    config_file_path = "./config.yaml"
+    config_file_path = "/content/config.yaml"
 
     # Read the existing content of the config file
     with open(config_file_path, "r") as file:
@@ -170,8 +153,6 @@ def update_config_file(model_names):
         config['model_list'] = []
 
     existing_models = {model['model_name'] for model in config['model_list']}
-
-    # Flag to check if the config file needs updating
     needs_update = False
 
     # Update the 'model_list' with new models
@@ -187,21 +168,21 @@ def update_config_file(model_names):
                 }
             }
             config['model_list'].append(entry)
-            existing_models.add(full_model_name)  # Add to existing models set
+            existing_models.add(full_model_name)
             needs_update = True
 
     # Write the updated content back to the YAML file and restart LiteLLM if necessary
     if needs_update:
         with open(config_file_path, "w") as file:
             yaml.dump(config, file, default_flow_style=False, sort_keys=False)
-        # Check if LiteLLM is running and restart it
         if is_litellm_running():
             restart_litellm()
+
 
 def start_openai_proxy():
     try:
         # Specify the command to start the OpenAI proxy endpoint
-        openai_endpointcmd = "PYTHONUNBUFFERED=1 python3 ./endpointopenai.py >> endpoint_openai.log 2>&1 &"
+        openai_endpointcmd = "PYTHONUNBUFFERED=1 python3 /content/endpointopenai.py >> endpoint_openai.log 2>&1 &"
 
         # Start the OpenAI proxy endpoint
         subprocess.Popen(openai_endpointcmd, shell=True)
@@ -210,7 +191,7 @@ def start_openai_proxy():
         time.sleep(15)
 
         # Read the last 2 lines from the endpoint_openai.log file
-        log_file_path = "./endpoint_openai.log"
+        log_file_path = "/content/endpoint_openai.log"
         with open(log_file_path, "r") as log_file:
             lines = log_file.readlines()
             last_2_lines = "".join(lines[-2:])  # Concatenate the last 2 lines
@@ -227,7 +208,7 @@ def start_endpoint_and_get_last_2_lines():
         time.sleep(15)
 
         # Read the last 2 lines from the endpoint.log file
-        log_file_path = "./endpoint.log"
+        log_file_path = "/content/endpoint.log"
         with open(log_file_path, "r") as log_file:
             lines = log_file.readlines()
             last_2_lines = "".join(lines[-2:])  # Concatenate the last 2 lines
@@ -238,8 +219,8 @@ def start_endpoint_and_get_last_2_lines():
 def kill_endpoint():
     try:
         # Specify the commands to kill both processes
-        kill_endpointcmd = "pkill -f './endpoint.py'"
-        kill_openai_endpointcmd = "pkill -f './endpointopenai.py'"
+        kill_endpointcmd = "pkill -f '/content/endpoint.py'"
+        kill_openai_endpointcmd = "pkill -f '/content/endpointopenai.py'"
 
         # Execute the kill commands for both processes
         os.system(kill_endpointcmd)
@@ -329,13 +310,12 @@ def main():
     initialize_log_files()
     with gr.Blocks(theme='ParityError/LimeFace') as app:
 
-
         gr.Markdown("Ollama Companion")
 
         with gr.Tab("ModelFile Templater"):
             with gr.Row():
                 model_name = gr.Textbox(label="Model Name", placeholder="Enter model name")
-                modelfile_content_input = gr.Textbox(lines=10, label="Modelfile Content", placeholder="Enter modelfile content")
+                modelfile_content_input = gr.Textbox(lines=10, label="Modelfile Content", placeholder="Enter manual modelfile content")
                 stop_sequence = gr.Textbox(label="Stop Sequence", placeholder="Enter stop sequence")
                 d1 = gr.Dropdown(choices=options_1, label="Model-Provider")
                 d2 = gr.Dropdown([])
@@ -457,9 +437,10 @@ def main():
             )
 
 
-
-
     app.launch(share=True)
+
+
 
 if __name__ == "__main__":
     main()
+
