@@ -46,7 +46,10 @@ urls = [
     "https://ollama.ai/library/goliath/tags",
     "https://ollama.ai/library/nexusraven/tags",
     "https://ollama.ai/library/xwinlm/tags",
-    "https://ollama.ai/library/alfred/tags"
+    "https://ollama.ai/library/alfred/tags",
+    "https://ollama.ai/library/starling-lm/tags",
+    "https://ollama.ai/library/magicoder/tags",
+    "https://ollama.ai/library/stablelm-zephyr/tags"
 ]
 
 # Define a function to scrape the specified div elements
