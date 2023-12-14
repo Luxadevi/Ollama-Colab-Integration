@@ -50,7 +50,7 @@ urls = [
     "https://ollama.ai/library/alfred/tags",
     "https://ollama.ai/library/xwinlm/tags",
     "https://ollama.ai/library/magicoder/tags",
-    "https://ollama.ai/library/stablelm-zephy/tags",
+    "https://ollama.ai/library/stablelm-zephyr/tags",
     "https://ollama.ai/library/llava/tags",
     "https://ollama.ai/library/bakllava/tags"
     
