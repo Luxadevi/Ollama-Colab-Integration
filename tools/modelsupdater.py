@@ -50,7 +50,11 @@ urls = [
     "https://ollama.ai/library/alfred/tags",
     "https://ollama.ai/library/xwinlm/tags",
     "https://ollama.ai/library/magicoder/tags",
-    "https://ollama.ai/library/stablelm-zephy/tags"
+    "https://ollama.ai/library/stablelm-zephy/tags",
+    "https://ollama.ai/library/llava/tags",
+    "https://ollama.ai/library/bakllava/tags"
+    
+    
 ]
 # Define a function to scrape the specified div elements
 def scrape_div_elements(url):
