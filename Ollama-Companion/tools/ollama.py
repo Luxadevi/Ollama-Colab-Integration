@@ -2,7 +2,6 @@ import subprocess
 import threading
 import time
 import logging.handlers
-import httpx
 import sys
 import os
 
