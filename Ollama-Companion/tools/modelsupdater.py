@@ -66,7 +66,7 @@ urls = [
     "https://ollama.ai/library/solar/tags",
     "https://ollama.ai/library/llama-pro/tags",
     "https://ollama.ai/library/megadolphin/tags",
-    "https://ollama.ai/library/stable-lm-2-1-6b/tags", # Added link to Stable LM 2 1.6B
+    "https://ollama.ai/library/stablelm2/tags",
     "https://ollama.ai/library/duckdb-nsql/tags", # Added link to duckdb-nsql
     "https://ollama.ai/library/qwen/tags", # Added link to qwen
     "https://ollama.ai/library/tinydolphin/tags", # Added link to tinydolphin
