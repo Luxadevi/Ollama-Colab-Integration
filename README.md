@@ -1,5 +1,7 @@
 # OLLAMA Colab Integration V4 with Ollama Companion Streamlite version
-
+Will update coming days.
+Mismatch with orginal versions so will update soon with alot of performance gains.
+Will be able to run within 2 minutes
 ## Overview
 Dive into the world of large language models with Ollama Colab Integration V4. This update brings an exciting feature: the ability to quantize models right within your notebook, coupled with the streamlined Ollama Companion, now powered by a Streamlit-based WebUI.
 
