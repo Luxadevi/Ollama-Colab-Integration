@@ -2,84 +2,46 @@ import requests
 from bs4 import BeautifulSoup
 import json
 
-# List of URLs to scrape
+# Existing list of URLs to scrape
 urls = [
     "https://ollama.ai/library/neural-chat/tags",
     "https://ollama.ai/library/mistral/tags",
     "https://ollama.ai/library/yi/tags",
     "https://ollama.ai/library/llama2/tags",
     "https://ollama.ai/library/codellama/tags",
-    "https://ollama.ai/library/llama2-uncensored/tags",
-    "https://ollama.ai/library/orca-mini/tags",
-    "https://ollama.ai/library/vicuna/tags",
-    "https://ollama.ai/library/wizard-vicuna-uncensored/tags",
-    "https://ollama.ai/library/phind-codellama/tags",
-    "https://ollama.ai/library/zephyr/tags",
-    "https://ollama.ai/library/wizardcoder/tags",
-    "https://ollama.ai/library/mistral-openorca/tags",
-    "https://ollama.ai/library/nous-hermes/tags",
-    "https://ollama.ai/library/wizard-math/tags",
-    "https://ollama.ai/library/llama2-chinese/tags",
-    "https://ollama.ai/library/deepseek-coder/tags",
-    "https://ollama.ai/library/falcon/tags",
-    "https://ollama.ai/library/stable-beluga/tags",
-    "https://ollama.ai/library/codeup/tags",
-    "https://ollama.ai/library/orca2/tags",
-    "https://ollama.ai/library/everythinglm/tags",
-    "https://ollama.ai/library/medllama2/tags",
-    "https://ollama.ai/library/wizardlm-uncensored/tags",
-    "https://ollama.ai/library/starcoder/tags",
-    "https://ollama.ai/library/dolphin2.2-mistral/tags",
-    "https://ollama.ai/library/wizard-vicuna/tags",
-    "https://ollama.ai/library/openchat/tags",
-    "https://ollama.ai/library/open-orca-platypus2/tags",
-    "https://ollama.ai/library/openhermes2.5-mistral/tags",
-    "https://ollama.ai/library/yarn-mistral/tags",
-    "https://ollama.ai/library/samantha-mistral/tags",
-    "https://ollama.ai/library/sqlcoder/tags",
-    "https://ollama.ai/library/yarn-llama2/tags",
-    "https://ollama.ai/library/openhermes2-mistral/tags",
-    "https://ollama.ai/library/meditron/tags",
-    "https://ollama.ai/library/wizardlm/tags",
-    "https://ollama.ai/library/mistrallite/tags",
-    "https://ollama.ai/library/dolphin2.1-mistral/tags",
-    "https://ollama.ai/library/deepseek-llm/tags",
-    "https://ollama.ai/library/codebooga/tags",
-    "https://ollama.ai/library/goliath/tags",
-    "https://ollama.ai/library/nexusraven/tags",
-    "https://ollama.ai/library/alfred/tags",
-    "https://ollama.ai/library/xwinlm/tags",
-    "https://ollama.ai/library/magicoder/tags",
-    "https://ollama.ai/library/stablelm-zephyr/tags",
-    "https://ollama.ai/library/llava/tags",
-    "https://ollama.ai/library/bakllava/tags",
-    "https://ollama.ai/library/dolphin-mixtral/tags",
-    "https://ollama.ai/library/mixtral/tags",
-    "https://ollama.ai/library/tinyllama/tags",
-    "https://ollama.ai/library/openhermes/tags",
-    "https://ollama.ai/library/notux/tags",
-    "https://ollama.ai/library/dolphin-mistral/tags",
-    "https://ollama.ai/library/notus/tags",
-    "https://ollama.ai/library/nous-hermes2/tags",
-    "https://ollama.ai/library/dolphin-phi/tags",
-    "https://ollama.ai/library/phi/tags",
-    "https://ollama.ai/library/solar/tags",
-    "https://ollama.ai/library/llama-pro/tags",
-    "https://ollama.ai/library/megadolphin/tags",
-    "https://ollama.ai/library/stablelm2/tags",
-    "https://ollama.ai/library/duckdb-nsql/tags", # Added link to duckdb-nsql
-    "https://ollama.ai/library/qwen/tags", # Added link to qwen
-    "https://ollama.ai/library/tinydolphin/tags", # Added link to tinydolphin
-    "https://ollama.ai/library/stable-code/tags", # Added link to stable-code
-    "https://ollama.ai/library/nous-hermes2-mixtral/tags", # Added link to nous-hermes2-mixtral
+    # (Your existing URLs here)
 ]
+
+# Scrape the main library page to find additional model URLs
+library_page_url = "https://ollama.com/library"
+response = requests.get(library_page_url)
+if response.status_code == 200:
+    soup = BeautifulSoup(response.text, 'html.parser')
+    new_urls = []
+    for h2 in soup.find_all("h2", class_="mb-3 truncate text-lg font-medium underline-offset-2 group-hover:underline md:text-2xl"):
+        link = h2.find_parent("a")
+        if link and link.get("href"):
+            new_url = f"https://ollama.ai{link['href']}/tags"
+            new_urls.append(new_url)
+
+    # Check for any new URLs not in the current list
+    new_urls_to_add = [url for url in new_urls if url not in urls]
+    if new_urls_to_add:
+        print(f"New URLs found and added to the list: {new_urls_to_add}")
+        urls.extend(new_urls_to_add)
+    else:
+        print("No new URLs found.")
+
+else:
+    print(f"Failed to fetch the library page. Status code: {response.status_code}")
+
 # Define a function to scrape the specified div elements
 def scrape_div_elements(url):
     try:
         response = requests.get(url)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'html.parser')
-            div_elements = soup.find_all("div", class_="break-all text-lg text-gray-900 group-hover:underline")
+            div_elements = soup.find_all("div", class_="break-all font-medium text-gray-900 group-hover:underline")
             values = [element.text.strip() for element in div_elements]
             return values
         else:
