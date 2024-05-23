@@ -4,12 +4,6 @@ import json
 
 # Existing list of URLs to scrape
 urls = [
-    "https://ollama.ai/library/neural-chat/tags",
-    "https://ollama.ai/library/mistral/tags",
-    "https://ollama.ai/library/yi/tags",
-    "https://ollama.ai/library/llama2/tags",
-    "https://ollama.ai/library/codellama/tags",
-    # (Your existing URLs here)
 ]
 
 # Scrape the main library page to find additional model URLs
@@ -18,10 +12,10 @@ response = requests.get(library_page_url)
 if response.status_code == 200:
     soup = BeautifulSoup(response.text, 'html.parser')
     new_urls = []
-    for h2 in soup.find_all("h2", class_="mb-3 truncate text-lg font-medium underline-offset-2 group-hover:underline md:text-2xl"):
+    for h2 in soup.find_all("h2", class_="flex items-center mb-3 truncate text-lg font-medium underline-offset-2 group-hover:underline md:text-2xl"):
         link = h2.find_parent("a")
         if link and link.get("href"):
-            new_url = f"https://ollama.ai{link['href']}/tags"
+            new_url = f"https://ollama.com{link['href']}/tags"
             new_urls.append(new_url)
 
     # Check for any new URLs not in the current list
@@ -31,7 +25,6 @@ if response.status_code == 200:
         urls.extend(new_urls_to_add)
     else:
         print("No new URLs found.")
-
 else:
     print(f"Failed to fetch the library page. Status code: {response.status_code}")
 
